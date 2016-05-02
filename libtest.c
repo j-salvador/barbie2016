@@ -2,10 +2,11 @@
 #include <time.h>
 
 
-extern "C" int init(int d_lev);
-extern "C" int take_picture();
-extern "C" char get_pixel(int row,int col,int colour);
-extern "C" int Sleep(int sec, int usec);
+int init(int d_lev);
+int take_picture();
+char get_pixel(int row,int col,int colour);
+int Sleep(int sec, int usec);
+
 
 int main(){
 
