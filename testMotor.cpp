@@ -26,7 +26,7 @@ int main (){
    //Test turning Left, the movement will be a lot like a tank with tank tracks.
    set_motor(1, -127); //Left wheel will rotate backwards at 50% speed
    set_motor(2, 127); // Right wheel will rotate forwards at 50% speed
-   Sleep (2 ,000000); //robot will turn left for 2 Seconds
+   Sleep (1 ,500000); //robot will turn left for 2 Seconds
    //Robot will then experience a sudden stop:
    set_motor(1, 0);
    set_motor(2, 0);
@@ -38,7 +38,7 @@ int main (){
    //Test turning Right
    set_motor(1, 127); //Left wheel will rotate forwards at 50% speed
    set_motor(2, -127); // Right wheel will rotate backwards at 50% speed
-   Sleep (2 ,000000); //robot will turn right for 2 Seconds
+   Sleep (1 ,500000); //robot will turn right for 2 Seconds
    //Robot will then experience a sudden stop:
    set_motor(1, 0);
    set_motor(2, 0);
