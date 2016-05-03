@@ -1,1 +1,1 @@
-This folder is used to store our test
+This folder is used to store test programs 
