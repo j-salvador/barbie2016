@@ -5,7 +5,7 @@ Repository for barbie2016 team for Autonomous Vehicle Challenge (AVC) for ENGR10
 - Jesse Wood 
     - Team management   
 - James Magallanes
-    Networking
+    - Networking
 - Calvin Rowe
     - Software development
 - Suraj Sathish 
