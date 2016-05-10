@@ -18,7 +18,6 @@ int main(){
     int z = 320; //Maximum array size
     int pixCord[z]; //Initializes the array Size
     int ambient = 0; //?? I will need to do the colorCalibration test before determining a value
-    int e = 0; //error - Research PID
     //You can change these value from 0-255
     int maxSpeed = 102;
     bool on = false;
@@ -34,7 +33,7 @@ while(true){ //Infinite Loop when robot turns on.
 
 	//When Power is applied turn motors on a period of (0.01*speed) Seconds
 	if(!(on)){ //Checks if AVC has already warmed up
-	for (int i = 0; i < maxSpeed; i++){
+	for (int i = 0; i < 30; i++){ // 30 will be replaced with maxSpeed
 		set_PWM(1 ,i);
 		set_PWM(2 ,i);
 		Sleep (0 ,010000);
