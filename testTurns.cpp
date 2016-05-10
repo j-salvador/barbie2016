@@ -7,10 +7,8 @@ extern "C" int set_motor( int motor , int speed);
 int main (){
 
    init(0);
-   char s ="Started:";
-   char f ="Finished:";
-
-   printf("%s Test 1.",s);
+   
+   printf("Test 1 start");
    //Turning Left
    Sleep (3 ,000000);
    set_motor(1, -51);
@@ -19,7 +17,7 @@ int main (){
    set_motor(1, 0);
    set_motor(2, 0);
    //brief pause to measure how far its turned
-   printf("%f Test 1.",f);
+   printf("Test 1 fin");
    Sleep (4 ,000000);
    printf("Returning to origin...");
    set_motor(1, 51);
@@ -28,7 +26,7 @@ int main (){
    set_motor(1, 0);
    set_motor(2, 0);
 
-   printf("%s Test 2.",s);
+   printf("Test 2.");
    //Turning Left
    Sleep (3 ,000000);
    set_motor(1, -51);
@@ -37,7 +35,7 @@ int main (){
    set_motor(1, 0);
    set_motor(2, 0);
    //brief pause to measure how far its turned
-   printf("%f Test 2.",f);
+   printf("Test 2.");
    Sleep (4 ,000000);
    printf("Returning to origin...");
    set_motor(1, 51);
@@ -46,7 +44,7 @@ int main (){
    set_motor(1, 0);
    set_motor(2, 0);
 
-   printf("%s Test 3.",s);
+   printf("Test 3.");
       //Turning Left
       Sleep (3 ,000000);
       set_motor(1, -51);
@@ -55,7 +53,7 @@ int main (){
       set_motor(1, 0);
       set_motor(2, 0);
       //brief pause to measure how far its turned
-      printf("%f Test 3.",f);
+      printf("Test 3.");
       Sleep (4 ,000000);
       printf("Returning to origin...");
       set_motor(1, 51);
