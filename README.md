@@ -1,6 +1,22 @@
 # barbie2016
 Repository for barbie2016 team for Autonomous Vehicle Challenge (AVC) for ENGR101 at Victoria University of Wellington 
 
+###Team Members:
+- Jesse Wood 
+    - Team management   
+- James Magallanes
+    Networking
+- Calvin Rowe
+    - Software development
+- Suraj Sathish 
+    - Software development
+- Patrick Coulson 
+    - Hardware design
+- Vincent McQueen
+    - Hardware design
+
+  
+
 ###Weekly Checklist
 #####Week 1:
 - [ ] Arrange team meetings (Jesse)
