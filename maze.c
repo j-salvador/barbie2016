@@ -23,16 +23,18 @@ extern "C" char ReadAnalog(int ch_adc);//Takes a reading from the ADC at the ana
 int main(){
 	//Declaration of global variables
 	float speed, turnSpeed, dLeft, dRight, dWall,dWallError;
-	int m1,m2;
-	int s1,s2;
-	bool inMaze;
+	int m1,m2; //Stores the motors in variables so they can easily be changed if this is wrong.
+	int s1,s2; //Stores the sensors in varibales so they can easily be changed around
+	bool inMaze; //Boolean for storing if the robot is in the maze
+	bool readyPWM; //Boolean for storing if the robot's engines are warmed up
 
 	//Initialization of global variables
 	speed = 30; //Sets the speed through out the maze to 30
-	turnSpeed = 10;
+	turnSpeed = 10; //Selected speed for when the robot is turning at a deadend, may want to make it slow down towards the end
 	dWall = 50; //Sets the average wall Distance when the robot is sensored, ie dLeft = dRight at facing foward.
 	inMaze = false; //The AVC doesn't start in the maze, when it detects it is, this will trigger.
-	dWallError = 5;
+	dWallError = 5; //The acceptable error value, that the PID can handle for dead end turns and correct.
+	readyPWM = false; //Initially set to false, since it will be at rest.
 	
 	//Sets the motors as global variables so they can be changed easily if the order is changed
 	m1 = 1; 
@@ -57,155 +59,111 @@ int main(){
 	* @method setSpeed
 	*/
 	void setSpeed(int motor ,int vel){
-		if(motor == 1){
+		if(motor == m1){
 			//The first motor rotates in the expected direction
 			set_motor(motor , vel); //Changes the 1st motors speed
 		}
 
-		else if (motor == m1){
+		else if (motor == m2){
 			//The second motor rotates in the opposite direction to the 1st, speed is therefore negative.
 			set_motor(vel , -1*vel); //Changes the 2nd motors speed
 		}
-		else if (motor == m2){
+		else if (motor == 3){
 			//If both motors are to go forward at the same speed
 			set_motor(m1 , vel); //Changes the first motors speed
 			set_motor(m2 , -1*vel); //Changes the second motors speed
 		}
 	}
+	/**
+	* @param dir: 
+	* @param setSpeed
+	* @method mTurn
+	*/
+	void PWM(char dir, int setSpeed){
+		//Handles acceleration and turning
+	}
 
 	/**
-    * @param motor
-    * @param vel
-    */
-	void speed(int motor, int vel){
-		//Declaration of variables
-		float speedChange, temp, velError;
-		//Initialization of variables
-		speedChange = 1;
-		velError = 5;
-		//Checks if the AVC is going slower than the set speed
-		if (speed < vel){
-			speedChange = speedChange //This constant is used in the loop to increase the speed
+	* @param dir: this character takes the values L and R for left and right respectively
+	* @method mTurn
+	*/
+	void mTurn(char dir, int setSpeed){
+		if (readyPWM == false){ //Checks if the motor is accelerating
+			PWM(dir, setSpeed);	//Calls the PWM funciton if the motor is accelerating
 		}
-		//Checks if the AVC is going faster than the set speed
-		if (speed > vel){
-			speedChange = -1* speedChange; //This constant is used in the loop to decrease the speed
-			temp = vel; //Stores the desired velocity temporarily since it is overwritten
-			//Swaps the velocity with the speed, so that the conditions for the loop aren't broken
-			vel = speed; 
-			speed = temp;
-		}
-		//Increases or decreases the speed until it reaches the desired speed
-		for (speed; speed < vel; speed += speedChange){ 
-			temp = speed;
-			speed = vel;
-			vel = speed;
-			setSpeed(motor, speed); //Sets the motors speed up to the desired velocity 
-			Sleep (0 ,010000); //Small breaks to makes sure the motor doesn't stress itself
-			temp = vel;
-			vel = speed 
-			vel = temp;
-		}
-		//If the speed if is near enough the desired velocity it will maintain constant speed
-		if (speed == vel + velError || speed == vel - velError){
-			setSpeed(vel);
+		else if (readyPWM == true) { //If the motor is warmed up
+			if (dir == "L"){ //Checks if the direction is left
+				//Sets the speed according to one wheel being backwards
+				setSpeed(m1, -1*setSpeed);
+				setSpeed(m2, setSpeed);
+			}
+			if (dir == "R"){ //Checks if the direction is right
+				//Sets the speed opposite to the previous statement
+				setSpeed(m1, setSpeed);
+				setSpeed(m2, -1*setSpeed);
+			}
 		}
 	}
 	/**
 	* @param dir: this character takes the values L and R for left and right respectively
 	* @method mTurn
 	*/
-	void mTurn(char dir){
-		speed(3, turnSpeed);
-		if (dir == "L"){
-			speed(m1, -1*turnSpeed);
-			speed(m2, turnSpeed);
-		}
-		if (dir == "R"){
-			speed(m1, turnSpeed);
-			speed(m2, -1*turnSpeed);
-		}
-	}
-
-	//ONE DIRECTION ONLY
-	void LROnly(char dir){
-		//Declaration of local varibales
-		String oppDir;
-		//Initialization of local variables
-		if (dir == "L"){
-			oppDir = "R";
-		}
-		else if (dir == "R"){
-			oppDir = "L";
-		}
-		//When turning the dir & oppDir distance will be larger and smaller than the wall distance respectively
-		while(takeReading(dir) > wallDist || takeReading(oppDir) > wallDist){
-			mTurn(dir);//Continues to turn right until a break condition or the while loop condition is triggered.
-			//Break when wall distance is equal.
-			if (takeReading(dir) == wallDist && takeReading(oppDir) == wallDist){
-				break;
-			}
-			//Break if the avc turns too far in the direction
-			else if (takeReading(dir) <= takeReading(oppDir)){
-				break;
-			}
-		}
-	}
-
-	//FORWARD + TURN
-	void fowardOrTurn(char dir){
+	void deadEndTurn(){
 		//Declaration of local variables
-		char oppDir;
 		//Initialization of local variables
-		if (dir == "L"){
-			oppDir = "R";
-		}
-		else if (dir == "R"){
-			oppDir = "L";
-		}
-		while (takeReading(dir) > wallDist && takeReading(oppDir) != wallDist){
-			if (takeReading(dir) < wallDist){
-				break;
+		int turnThreshold = 10; //Stores the margin of error for this dead end turn
+		while(true){ //Runs until the if condition returns the function
+			//Reverses the avc while both readings are smaller than the average wall distance
+			while (takeReading("L") > wDist && takeReading("R")> wDist){
+				readyPWM == false; //Sets the PWM to false, since it will decelerate to a stop, and then reverse
+				setSpeed (3, -1*speed); //Buts both motors turning the opposite way
 			}
-			mTurn(dir);
-		}
-	}
-
-	//FORWARD ONLY
-	void forwardOnly() {
-		//If both the walls are equal distance apart just move forward.
-		while (takeReading("L") > wDist == takeReading("R")> wDist){
-			setSpeed(3 , speed);
-		}
-	}
-
-	//BACK ONLY
-	void backOnly(){
-		//If both of the sensors take a distance less than the wall
-		while(takeReading("L") > wDist && takeReading("R")> wDist){
-			//Breaks when both of the readings are equal
-			if (takeReading("L") == wallDist && takeReading("R") == wallDist){
-				break;
+			readyPWM = false; //Sets the PWM since it will come to rest
+			setSpeed(3, 0); //Sets the speed to 0, making it come to rest
+			//Turns the avc just enough so that the left sensor is always less than the wall distance until the turn in complete
+			for (int i = 0; i<turnThreshold; i++){
+				mTurn("R", turnSpeed);//Turns right, so the left sensor is always smaller than the wall distance
 			}
-			mTurn("R");//Turns to the right in the maze
+			//Continues to turn right until the wall distance is greater than or equal to the left reading.
+			while (takeReading("L") > wDist){
+				mTurn("R", turnSpeed);
+				if (takeReading("L") <= wDist){
+					return; //Exits the loop, when the avc has completed the full 180 degree turn or more.
+				}
+			}
 		}
 	}
 
-	//LEFT + FORWARD + RIGHT
-	void leftFrwdRight(){
-		while (takeReading("L") > wallDist && takeReading("R") != wallDist){
-			if (takeReading("L") == wallDist){
-				break;
+	void mazePID(){
+		///Declaration of the variables
+		float kd, ki, kd, pSig, iSig, dSig;
+		int speedPID; //Stores the intended speed for the avc based of the
+		char dirPID; //Stores the intended direction for the avc
+		//Initilization of the variables
+		kd = maxSpeed/maxReading;
+		ki = 0;
+		kd = 0;
+
+		while(inMaze){
+			//Takes an error signal of how far away the avc is from the center based of the left wall
+			pSig = takeReading("L") - dWall; //makes 0 the value when the avc is centered.
+			if (pSig > 0){ //If the avc is slightly to the right of perpendicular to the wall
+				dirPID = "L"; //Change the direction to left
 			}
-			mTurn("L");
+			else if (pSig < 0){ //If the avc is slight to the left of perpendicular to the wall
+				dirPID = "R"; //Change the direciton to right
+			}
+			if (pSig != 0){ //Turn if it is not centered
+				set_motor(m1,(pSig)*kd );
+				set_motor(m2, -1*(pSig)*kd);
+				//mTurn(dirPID, (pSig)*kd); //Turn accordingly
+			}
+			else if (pSig == 0){ //If it is centered
+				setSpeed(3, speed); //Keep going forward
+			}
+		}
 	}
 
-	//Need to add methods that recognise the wallside and then adjust accordingly
-
-	//void navigateMaze(){}
-
-
-
-
+	
 	return 0;
 }
