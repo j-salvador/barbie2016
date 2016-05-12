@@ -1,9 +1,8 @@
 #include <stdio.h>	//import libraries
 #include <stdbool.h>
-#include <pixel.c>
 #include <time.h>
 #include <math.h>
-#include <bool.h>
+#include <stdbool.h>
 
 
 //these load specific methods from the ENGR101 library
@@ -14,15 +13,15 @@ extern "C" int Sleep(int sec, int usec); //Lets the computer sleep for set amoun
 extern "C" int set_motor( int motor , int speed); //Changes a motors speed
 extern "C" char ReadAnalog(int ch_adc);//Takes a reading from the ADC at the analog channel selected
 
-//extern "C" int set_PWM( int chan , int value ); 
+//extern "C" int set_PWM( int chan , int value );
 //extern "C" char set_pixel(int row, int col,char red,char green, char blue);
 
 /**
-* 
+*
 */
 int main(){
 	//Declaration of global variables
-	float speed, turnSpeed, dLeft, dRight, dWall,dWallError;
+	float speed, turnSpeed, maxSpeed, maxReading, dLeft, dRight, dWall,dWallError;
 	int m1,m2; //Stores the motors in variables so they can easily be changed if this is wrong.
 	int s1,s2; //Stores the sensors in varibales so they can easily be changed around
 	bool inMaze; //Boolean for storing if the robot is in the maze
@@ -35,22 +34,26 @@ int main(){
 	inMaze = false; //The AVC doesn't start in the maze, when it detects it is, this will trigger.
 	dWallError = 5; //The acceptable error value, that the PID can handle for dead end turns and correct.
 	readyPWM = false; //Initially set to false, since it will be at rest.
-	
+	maxSpeed = 50;
+	maxReading = 100;
+
 	//Sets the motors as global variables so they can be changed easily if the order is changed
-	m1 = 1; 
+	m1 = 1;
 	m2 = 2;
 
 	/**
 	* @param anologChannel
 	* @method takeReading
 	*/
-	void takeReading(int analogChannel){
+	double takeReading(char analogChannel){
+	    double x = new double ReadAnalog(analogChannel);
 		if (analogChannel == s1){ //The first sensor s1, will take the dLeft readings
 			dLeft = ReadAnalog(analogChannel); //Sets the dLeft global variables to the value of the IR sensor
 		}
 		if (analogChannel == s2){ //The second sensor s2, will take the dRight readings
 			dRight = ReadAnalog(analogChannel) //Sets the dRight global variables to the value of the IR sensor
 		}
+		return x; //Might not work in c
 	}
 
 	/**
@@ -75,7 +78,7 @@ int main(){
 		}
 	}
 	/**
-	* @param dir: 
+	* @param dir:
 	* @param setSpeed
 	* @method mTurn
 	*/
@@ -128,12 +131,16 @@ int main(){
 			while (takeReading("L") > wDist){
 				mTurn("R", turnSpeed);
 				if (takeReading("L") <= wDist){
+					PID();//Restarts the PID after the turn is complete
 					return; //Exits the loop, when the avc has completed the full 180 degree turn or more.
 				}
 			}
 		}
 	}
-
+    /**
+	*
+	* @method mazePID
+	*/
 	void mazePID(){
 		///Declaration of the variables
 		float kd, ki, kd, pSig, iSig, dSig;
@@ -161,9 +168,15 @@ int main(){
 			else if (pSig == 0){ //If it is centered
 				setSpeed(3, speed); //Keep going forward
 			}
+			//If the readings are both just slightly smaller than the wall distance
+			if (takeReading("L") > dWall-dWallError && takeReading("R")> dWall-dWallError){
+				deadEndTurn(); //Do a deadend turn
+				return;//Stop the PID function, so that the deadEndTurn function isn't called multiple times
+			}
+
 		}
 	}
 
-	
+
 	return 0;
 }
