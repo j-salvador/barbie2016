@@ -1,2 +1,2 @@
-output:followLine.cpp
-  gcc -L/usr/lib -o output followLine.cpp -lE101
+output:line.cpp
+	g++ -L/usr/lib -o output line.cpp -lE101
