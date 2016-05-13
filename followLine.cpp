@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <time.h>
+#include <math.h>
 
 //these load specific methods from the ENGR101 library
 extern "C" int init(int d_lev);
@@ -14,26 +15,23 @@ int main(){
     //This sets up the RPi hardware and ensures
     //everything is working correctly
     init(0);
-    char c;
+    int maxSpeed = 102;//You can change this value from 0-255
+    float kp = 0.5;
+//-------------------------------------------------------------------------------
+    //Don't change these values:
     int z = 320; //Maximum array size
     int pixCord[z]; //Initializes the array Size
-    int ambient = 0; //?? I will need to do the colorCalibration test before determining a value
-    //You can change these value from 0-255
-    int maxSpeed = 102;
-    bool on = false;
-    int VL = maxSpeed; //Velocity of Left & Right Motor if on top of line
-    int VR = maxSpeed;
-    int wLight = 200;// Not sure what this is, testing tomorrow.
-    int bLight = 50;// Same again not sure what value should be here.
-    				//-- Anything below wLight reading is going to be changed to a black pixel
-    float Psignal;
-    float kp = 0.5;
-    int sum;
+    bool on = false; //PWM
+    int VL;
+    int VR;
+    float errorValue;  
+    float p;
+    //----------------------------------------------------------------------------
 while(true){ //Infinite Loop when robot turns on.
 
 	//When Power is applied turn motors on a period of (0.01*speed) Seconds
 	if(!(on)){ //Checks if AVC has already warmed up
-	for (int i = 0; i < 30; i++){ // 30 will be replaced with maxSpeed
+	for (int i = 0; i < maxSpeed; i++){ // 30 will be replaced with maxSpeed
 		set_PWM(1 ,i);
 		set_PWM(2 ,i);
 		Sleep (0 ,010000);
@@ -45,13 +43,14 @@ while(true){ //Infinite Loop when robot turns on.
 //--------------------------------------------------------------------------
     while(true){ //Loop - Breaks once single frame is scanned.
     //Every cycle analyzes one single frame.
-       bool Line = false;
+       bool line = false;
        take_picture();
-       sum = 0;
+       errorValue = 0;
+       p=0;
        int w, s;
        for (int i = 0; i < sizeof(pixCord); i++){
     	   pixCord[i] = get_pixel(i,120,3);
-    	   //Removes noise:
+    	   //The if and else statements Remove any noise:
     	   if(pixCord[i] < 127){ //If pixel is closer to black
     		   w = 255;
     		   pixCord[i] = set_pixel(i, 120,w,w,w); //Possible method for mapping
@@ -60,33 +59,42 @@ while(true){ //Infinite Loop when robot turns on.
     		   w= 255 ;
     		   pixCord[i] = set_pixel(i, 120,w,w,w);
     		   s=1;
+    		   line = true;
     	   }
-    	   sum = sum + (i-160)*s; //Negative value = line left side
+    	   errorValue = errorValue + (i-160)*s; //Negative value = line left side
     	   	   	   	   	   	   	  //Higher the value the further away the AVC is to the line.
-       }
-     if(sum == 0){
-    	 bool Line = false; // No line detected.
-    	 //Insert Movement to rotate AVC by 45 to 90 degrees
+       }//Closes for loop
+     errorValue = errorValue/sizeof(pixCord); //Averages error value, Once for loop is complete 
+     if(line){
+    	 break;
+    	  
+     }else{
+    	 // No line detected.
+    	 set_motor(1,0);
+    	 set_motor(2,0);
+    	 Sleep (0 ,200000);
+    	 set_motor(1,-100);//Start Pivoting left.
+    	 set_motor(2,-100);
+    	 Sleep (0 ,800000);
     	 //This means the loop will repeat in attempt to re-find the line
     	 //pivot();
-     }else{
-         bool Line = true; // line detected.
-         break;
      }
     }
 //---------------------------------------------------------------------------
     //Movement of Robot:
-    	sum = sum/sizeof(pixCord);
-    	Psignal = sum*kp; // sum is the error value    	
-    	VL = 30 *Psignal;
-		VR = 30 *Psignal;
+    //Robot will run at maxSpeed unless it loses the line, then it will decrease the nth motor speed
+    //corresponding to the side the line is on.
+    	p = roundf(1 * errorValue) / 1; //Rounds to a Whole number 
+    	VL = maxSpeed - p; //Added P need to add I & D
+		VR = (-1*maxSpeed) + p;
     	set_motor(1,VL);
-    	set_motor(2,-1*VR);
-    	//f(x) = 0.1(b^x)+0
+    	set_motor(2,VR);
+    	
 
 //---------------------------------------------------------------------------
 }//Closers Main Loop
 return 0;}
 /*Notes:
  * I should Add more Debugging Print messages.
+ * colorCalibration test needed to determine a value for ambient, wLight and bLight
  */
