@@ -19,49 +19,30 @@ int main(){
     //Don't change these values:
     int z = 320; //Maximum array size
     int pixCord[z]; //Initializes the array Size
-    bool on = false; //PWM
-    int VL;
-    int VR;
-  
+    
+    //int VL;
+    //int VR;
 //--------------------------------------------------------------------------
-    while(true){ //Loop - Breaks once single frame is scanned.
-    //Every cycle analyzes one single frame.
-       bool line = false;
+    while(true){ 
        take_picture();
-       errorValue = 0;
-      
        int s;
-        int w;
-       for (int i = 0; i < sizeof(pixCord); i++){
-           w  = get_pixel(i,120,3);
-           //The if and else statements Remove any noise:
-           if(w < 127){ //If pixel is closer to black
-                           s=0;
-           }else { //white pix
-                   s=1;
-                   line = true;
-           }
-          
-                                                          //Higher the value the further away th$
-       
-     
-        VL = maxSpeed ; 
-        VR = (-1*maxSpeed);
+       int w;       
+       w  = get_pixel(160,120,3); // Looks at center pixel
+       if(w < 127){ //If pixel is closer to black
+    	   s=0;
+       }else {
+           s=1;
+           line = true;
+       }
+        //VL = maxSpeed ; 
+        // VR = (-1*maxSpeed);
         if(s==1){
-        set_motor(1,VL);
-        set_motor(2,VR);
+        	printf("White \n");
+        //set_motor(1,VL);
+        //set_motor(2,VR);
         }
         if(s==0){
-        set_motor(1,0);
-        set_motor(2,0);	
+        	printf("Black \n");
         }
-}//Closes For Loop
-
-        
 }//Closers Main Loop
-//---------------------------------------------------------------------------
 return 0;}
-/*Notes:
- * I should Add more Debugging Print messages.
- * colorCalibration test needed to determine a value for ambient, wLight and bLight
- */
