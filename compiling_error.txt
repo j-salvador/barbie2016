@@ -1,0 +1,25 @@
+C:\Users\Jesse Wood\OneDrive\Documents\barbie2016\maze.cpp: In function 'float takeReading(int)':
+C:\Users\Jesse Wood\OneDrive\Documents\barbie2016\maze.cpp:66:26: error: 'ReadAnalog' was not declared in this scope
+         y = ReadAnalog(s1);
+                          ^
+C:\Users\Jesse Wood\OneDrive\Documents\barbie2016\maze.cpp:72:22: error: 'ReadAnalog' was not declared in this scope
+     y = ReadAnalog(s2);
+                      ^
+C:\Users\Jesse Wood\OneDrive\Documents\barbie2016\maze.cpp: In function 'void PWM(int, int, int)':
+C:\Users\Jesse Wood\OneDrive\Documents\barbie2016\maze.cpp:93:15: error: 'currentSpeed' was not declared in this scope
+     if (vel > currentSpeed){
+               ^
+C:\Users\Jesse Wood\OneDrive\Documents\barbie2016\maze.cpp:114:17: error: expected primary-expression before 'int'
+     setSpeed(3, int PWMspeed);
+                 ^
+C:\Users\Jesse Wood\OneDrive\Documents\barbie2016\maze.cpp: In function 'void mTurn(int, int)':
+C:\Users\Jesse Wood\OneDrive\Documents\barbie2016\maze.cpp:152:15: error: too few arguments to function 'void PWM(int, int, int)'
+   PWM(dir, vel); //Calls the PWM funciton if the motor is accelerating
+               ^
+C:\Users\Jesse Wood\OneDrive\Documents\barbie2016\maze.cpp:84:6: note: declared here
+ void PWM(int dir, int motor, int vel){
+      ^
+C:\Users\Jesse Wood\OneDrive\Documents\barbie2016\maze.cpp: In function 'int main()':
+C:\Users\Jesse Wood\OneDrive\Documents\barbie2016\maze.cpp:266:19: error: 'InitHardware' was not declared in this scope
+     InitHardware(0);//Initilize the RPis harware
+                   ^
