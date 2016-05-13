@@ -1,4 +1,4 @@
- 
+
 #include <stdio.h>
 #include <time.h>
 
@@ -8,7 +8,6 @@ extern "C" int take_picture();
 extern "C" char get_pixel(int row,int col,int color);
 extern "C" int Sleep(int sec, int usec);
 extern "C" int set_motor( int motor , int speed);
-extern "C" int set_PWM( int chan , int value );
 
 int main(){
     //This sets up the RPi hardware and ensures
@@ -24,29 +23,13 @@ int main(){
     int VL;
     int VR;
   
-float errorValue;
-    float p;
-    //----------------------------------------------------------------------------
-while(true){ //Infinite Loop when robot turns on.
-
-        //When Power is applied turn motors on a period of (0.01*speed) Seconds
-        if(!(on)){ //Checks if AVC has already warmed up
-        for (int i = 0; i < maxSpeed; i++){ // 30 will be replaced with maxSpeed
-                set_PWM(1 ,i);
-                set_PWM(2 ,i);
-                Sleep (0 ,010000);
-                if(i > maxSpeed-1){
-                        on = true; //AVC motor's are warmed up and ready to go
-                }
-        }
-        }
 //--------------------------------------------------------------------------
     while(true){ //Loop - Breaks once single frame is scanned.
     //Every cycle analyzes one single frame.
        bool line = false;
        take_picture();
        errorValue = 0;
-       p=0;
+      
        int s;
         int w;
        for (int i = 0; i < sizeof(pixCord); i++){
@@ -58,13 +41,11 @@ while(true){ //Infinite Loop when robot turns on.
                    s=1;
                    line = true;
            }
-           //errorValue = errorValue + (i-160)*s; //Negative value = line left side
+          
                                                           //Higher the value the further away th$
        }//Closes for loop
      
-     
-        //p =  errorValue*kp; //Rounds to a Whole number
-        VL = maxSpeed ; //Added P need to add I & D
+        VL = maxSpeed ; 
         VR = (-1*maxSpeed);
         if(s==1){
         set_motor(1,VL);
@@ -74,10 +55,9 @@ while(true){ //Infinite Loop when robot turns on.
         set_motor(1,0);
         set_motor(2,0);	
         }
-        }
-
-//---------------------------------------------------------------------------
+        
 }//Closers Main Loop
+//---------------------------------------------------------------------------
 return 0;}
 /*Notes:
  * I should Add more Debugging Print messages.
