@@ -43,7 +43,7 @@ int main(){
            }
           
                                                           //Higher the value the further away th$
-       }//Closes for loop
+       
      
         VL = maxSpeed ; 
         VR = (-1*maxSpeed);
@@ -55,6 +55,8 @@ int main(){
         set_motor(1,0);
         set_motor(2,0);	
         }
+}//Closes For Loop
+
         
 }//Closers Main Loop
 //---------------------------------------------------------------------------
