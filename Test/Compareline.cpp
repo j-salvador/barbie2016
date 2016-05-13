@@ -30,7 +30,7 @@ int main(){
        bool line = false;
        take_picture();
        errorValue = 0;
-       p=0;
+      
        int s;
         int w;
        for (int i = 0; i < sizeof(pixCord); i++){
@@ -42,7 +42,7 @@ int main(){
                    s=1;
                    line = true;
            }
-           //errorValue = errorValue + (i-160)*s; //Negative value = line left side
+          
                                                           //Higher the value the further away th$
        }//Closes for loop
      
