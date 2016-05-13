@@ -32,7 +32,7 @@ int main(){
     	   s=0;
        }else {
            s=1;
-           line = true;
+           
        }
         //VL = maxSpeed ; 
         // VR = (-1*maxSpeed);
