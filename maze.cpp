@@ -6,6 +6,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include <string.h>
+#include "avcMain.cpp"
 //------------------------------------------------------------------------------
 //these load specific methods from the ENGR101 library
 extern "C" int init(int d_lev);
@@ -249,15 +250,8 @@ void mazePID(){
 
 	}
 }
-//------------------------------------------------------------------------------
-/**
-* @method main
-*/
-int main(){
-    InitHardware(0);//Initilize the RPis harware
-    //Check if the avc is in the maze continuosly.
-    while(!inMaze){
-    	mazeCheck(); //Check if it in the maze.
-    }
-	return 0;
+
+int test(){
+    prinf("Done.");
 }
+//------------------------------------------------------------------------------
