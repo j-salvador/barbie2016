@@ -33,10 +33,10 @@ Repository for barbie2016 team for Autonomous Vehicle Challenge (AVC) for ENGR10
 
 #####Week 3:
 - [ ] Write methods section (ALL)
-- [ ] Update Gantt chart 
-- [ ] Test current code (Suraj/Calvin)
-- [ ] Prototype design (Vincent/Patrick)
-- [ ] Test networking code/SSHing into RaspberryPi (James)
+- [ ] Update Gantt chart (Jesse)
+- [x] Test current code (Suraj/Calvin)
+- [x] Prototype design (Vincent/Patrick)
+- [x] Test networking code/SSHing into RaspberryPi (James)
 
 #####Week 4:
 - [ ] Write results and discussion section (ALL)
