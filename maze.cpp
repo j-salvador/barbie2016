@@ -6,7 +6,8 @@
 #include <math.h>
 #include <stdbool.h>
 #include <string.h>
-#include "avcMain.cpp"
+//#include "avcMain.cpp"
+
 //------------------------------------------------------------------------------
 //these load specific methods from the ENGR101 library
 extern "C" int init(int d_lev);
@@ -16,6 +17,7 @@ extern "C" int Sleep(int sec, int usec);
 extern "C" int set_motor( int motor , int speed);
 extern "C" int set_PWM( int chan , int value );
 extern "C" char set_pixel(int row, int col,char red,char green, char blue);
+extern "C" int ReadAnalog(int ch_adc);
 //-----------------------------------------------------------------------------
 //Declaraiton of the functions.
 float takeReading(int analogChannel);
@@ -24,7 +26,7 @@ void PWM(int dir, int motor, int speed);
 void deadEndTurn();
 void mazeCheck();
 void mazePID();
-int main();
+
 //------------------------------------------------------------------------------
 //Initialization of global variables
 float speed = 30; //Sets the speed through out the maze to 30
@@ -34,7 +36,7 @@ float dWallError = 5; //The acceptable error value, that the PID can handle for 
 bool readyPWM = false; //Initially set to false, since it will be at rest.
 float maxSpeed = 50; //Sets the maximum speed for the AVC going through the maze.
 float maxReading = 100; //This is the maximum reading for the IR sensors when they are in the maze.
-float currSpeed = 0; //A global variables to store the current speed of the AVC for PWM.
+float currentSpeed = 0; //A global variables to store the current speed of the AVC for PWM.
 
 float deadSpeed = 40; //The speed at which it turns at dead ends.
 float dLeft; //variables to store the readings on the left sensors
@@ -126,7 +128,7 @@ void PWM(int dir, int motor, int vel){
         Sleep (0 ,010000);
     }
 	readyPWM = true; //Once the AVC has either accelerated or decelerated to the desired speed the function will stop.
-    setSpeed(3, int PWMspeed);
+    setSpeed(3, PWMspeed);
     return;
 }
 //------------------------------------------------------------------------------
@@ -171,12 +173,12 @@ void deadEndTurn(){
 		takeReading(s2);
 		while (dLeft > dWall && dRight> dWall){
 			readyPWM == false; //Sets the PWM to false, since it will decelerate to a stop, and then reverse
-			currSpeed = speed;
+			currentSpeed = speed;
 			setSpeed (3, -1*speed); //Buts both motors turning the opposite way
 		}
 		readyPWM = false; //Sets the PWM since it will come to rest
 		setSpeed(3, 0); //Sets the speed to 0, making it come to rest
-		currSpeed = 0;
+		currentSpeed = 0;
 		//Turns the avc just enough so that the left sensor is always less than the wall distance until the turn in complete
 		for (int i = 0; i<turnThreshold; i++){
 			setSpeed(m1, -1*deadSpeed + i);//Turns right, so the left sensor is always smaller than the wall distance
@@ -251,7 +253,9 @@ void mazePID(){
 	}
 }
 
-int test(){
-    prinf("Done.");
+int main(){
+    if (!inMaze){
+        mazeCheck();
+    }
 }
 //------------------------------------------------------------------------------
