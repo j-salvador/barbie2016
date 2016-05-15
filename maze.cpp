@@ -5,7 +5,7 @@
 #include <time.h>
 #include <math.h>
 #include <stdbool.h>
-#include <string.h>
+
 //#include "avcMain.cpp"
 
 //------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ float takeReading(int analogChannel);
 void setSpeed(int motor, int speed);
 void PWM(int dir, int motor, int speed);
 void deadEndTurn();
-void mazeCheck();
+bool navigateMaze();
 void mazePID();
 
 //------------------------------------------------------------------------------
@@ -200,18 +200,18 @@ void deadEndTurn(){
 *
 * @method mazePID
 */
-void mazeCheck(){
+bool navigateMaze(){
   //Takes the readings from both of the IR sensors
 	takeReading(s1);
 	takeReading(s2);
   //If the robot is in the maze this condition should be true
 	if (dLeft <= dWall-dWallError || dLeft <= dWall+dWallError){
         if (dRight <= dWall+dWallError || dRight <= dWall-dWallError){
-    		  inMaze = true;
+    		  mazePID();
         }
 	}
 	else {
-		inMaze = false;
+		return false;
 	}
 }
 //------------------------------------------------------------------------------
@@ -220,42 +220,44 @@ void mazeCheck(){
 * @method mazePID
 */
 void mazePID(){
-	///Declaration of the variables
-	int speedPID; //Stores the intended speed for the avc based of the
-	char dirPID; //Stores the intended direction for the avc
-	//Initilization of the variables
-	float kp = maxSpeed/maxReading;
-	float ki = 0;
-	float kd = 0;
+    ///Declaration of the variables
+    int speedPID; //Stores the intended speed for the avc based of the
+    //Initilization of the variables
+    float kp = 0.005;//maxSpeed/maxReading;
+    float ki = 0;
+    float kd = 0;
+    int pSigIntial = 0;
     //PID signal variables
-	float pSig;
-	float iSig;
-	float dSig;
-    //Runs while the robot is in the maze
-	while(inMaze){
-		//Takes an error signal of how far away the avc is from the center based of the left wall
-		speedPID = (int) (pSig)*kp;
-        //Turn if it is not centered
-		if (pSig != 0){
-			set_motor(m1,speedPID);
-			set_motor(m2,speedPID);
-		}
-        //If it is centered
-		else if (pSig == 0){
-			setSpeed(3, speed); //Keep going forward
-		}
-		//If the readings are both just slightly smaller than the wall distance
-		if (takeReading(s1) > dWall-dWallError && takeReading(s2)> dWall-dWallError){
-			deadEndTurn(); //Do a deadend turn
-			return;//Stop the PID function, so that the deadEndTurn function isn't called multiple times
-		}
+    float pSig;
+    float iSig;
+    float dSig;
+    while (inMaze){
+        //Runs while the robot is in the maze
+    	while(inMaze){
+    		//Takes an error signal of how far away the avc is from the center based of the left wall
+            pSig = pSigIntial - takeReading(s1);
+    		speedPID = currentSpeed - (int) (pSig)*kp;
+            //Turn if it is not centered
+    		if (pSig != 0){
+    			set_motor(m1,speedPID);
+    			set_motor(m2,-1*speedPID);
+    		}
+            //If it is centered
+    		else if (pSig == 0){
+    			setSpeed(3, speed); //Keep going forward
+    		}
+    		//If the readings are both just slightly smaller than the wall distance
+    		if (takeReading(s1) > dWall-dWallError && takeReading(s2)> dWall-dWallError){
+    			deadEndTurn(); //Do a deadend turn
+    			return;//Stop the PID function, so that the deadEndTurn function isn't called multiple times
+    		}
 
-	}
+    	}
+    }
 }
 
 int main(){
-    if (!inMaze){
-        mazeCheck();
-    }
+    navigateMaze();
+    return 0;
 }
 //------------------------------------------------------------------------------
