@@ -19,21 +19,21 @@ Repository for barbie2016 team for Autonomous Vehicle Challenge (AVC) for ENGR10
 
 ###Weekly Checklist
 #####Week 1:
-- [ ] Arrange team meetings (Jesse)
+- [x] Arrange team meetings (Jesse) ==> Slack Channel and FB group made for keeping updated
 - [x] Write code for straight line movement (Suraj/Kelvin)
 - [x] Set up git repository (James)
 - [x] Basic hardware design (Calvin/Vincent)
 
 #####Week 2:
 - [ ] Write background section (ALL)
-- [ ] Arrange online meetings + Gantt charts (Jesse)
+- [x] Create Slack Channel + Gantt charts (Jesse)
 - [x] Continue design (Vincent/Patrick)
 - [x] Upload code onto Github (Suraj/Calvin)
 - [x] Update Github with progress, start networking (James)
 
 #####Week 3:
 - [ ] Write methods section (ALL)
-- [ ] Update Gantt chart (Jesse)
+- [x] Update Gantt chart (Jesse)
 - [x] Test current code (Suraj/Calvin)
 - [x] Prototype design (Vincent/Patrick)
 - [x] Test networking code/SSHing into RaspberryPi (James)
