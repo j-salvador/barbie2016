@@ -23,18 +23,25 @@ bool mazeDone = false;
 */
 int main(){
     InitHardware(0);//Initilize the RPis hardware
-    while (!done){
-        gateCheck(); //if (gateDone) {return;} else {runGate}
-        if (gateDone){
-            tapeCheck(); //if (tapeDone) {return;} else {runTape}
-            if (tapeDone){
-                mazeCheck(); //if (mazeDone) {return;} else {runMaze}
-                if (mazeDone){
-                    done = true;
+    while(!done){
+        while (!gateDone){
+            gateDone = networkGate();
+            if(gateDone){
+                while(!tapeDone){
+                    tapeDone = line();
+                    if(tapeDone){
+                        while(!mazeDone){
+                            mazeDone = navigateMaze()
+                            if (mazeDone){
+                                return 0;
+                            }
+                        }
+                    }
                 }
             }
         }
     }
+
     std::cin.get();
 	return 0;
 }
