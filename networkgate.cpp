@@ -19,7 +19,11 @@ bool networkGate(){
     receive_from_server(message); //this may be buggy! //receives message from the connected server
     message[messageLength] = '\0'; // strlen(message) = 6, sizeof(str) = 12 (with 6 nulls) http://stackoverflow.com/questions/4711449/what-does-the-0-symbol-mean-in-a-c-string
     send_to_server(message);		//sends a message to the connected server
-    return true;
-
     printf("%s", message);
+    return true;
+}
+
+int main(){
+    networkGate();
+    return 0;
 }
