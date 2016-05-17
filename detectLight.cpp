@@ -18,10 +18,10 @@ int main(){
     int s;
     double errorValue;
     double P = 0;
-    double kp = 0.005;
-    //int maxSpeed = 100;
-    //int VL;
-	//int VR;
+    double kp = 0.0025;
+    int maxSpeed = 40;
+    int VL;
+    int VR;
     
 
 //-----------------------------------------------------------
@@ -42,9 +42,9 @@ int main(){
        //errorValue = round(errorValue); //Rounds errorValue to a whole number
        P = errorValue*kp;
        printf("Error Value: %d \n" ,P);
-       //VL = maxSpeed - (errorValue*kp);
-       //VR = maxSpeed + (errorValue*kp);
-       //set_motor(1,VL);
-       //set_motor(2,-VR);
+       VL = maxSpeed - (P);
+       VR = maxSpeed + (P);
+       set_motor(1,VL);
+       set_motor(2,-VR);
     }//Closes While Loop
 return 0;}
