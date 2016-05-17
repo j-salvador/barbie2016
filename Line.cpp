@@ -18,17 +18,20 @@ int main(){
     int s;
     double errorValue;
     double P = 0;
-    double kp = 0.0025;
-    int maxSpeed = 40;
+    double kp = 0.0020;
+    int maxSpeed = 51;
     int VL;
     int VR;
-    
-
+    time_t start; //Sets 0 Point for timer to begin the clock at.
+    time_t finish; //Sets finishing time
+    time_t dif;
+    time_t fps;
 //-----------------------------------------------------------
     while(true){
-       take_picture();
-       errorValue = 0;
-       for (int i = 0; i < 320; i++){
+    	start = time(NULL);
+    	take_picture();
+    	errorValue = 0;
+    	for (int i = 0; i < 320; i++){
     	   w = get_pixel(i,120,3);
     	   if(w < 127){ //If pixel is close to black
     		   s=0;
@@ -37,14 +40,26 @@ int main(){
     	   }
 
     	   errorValue = errorValue + (i-160)*s; //Adds to errorValue if its a white pixel
-       }//Closes For Loop
+    	}//Closes For Loop
 
-       //errorValue = round(errorValue); //Rounds errorValue to a whole number
-       P = errorValue*kp;
-       printf("Error Value: %d \n" ,P);
-       VL = maxSpeed - (P);
-       VR = maxSpeed + (P);
-       set_motor(1,VL);
-       set_motor(2,-VR);
+    	//errorValue = round(errorValue); //Rounds errorValue to a whole number
+    	P = errorValue*kp;
+    	//printf("Error Value: %d \n" ,P);
+    	VL = maxSpeed - (P);
+    	VR = maxSpeed + (P);
+    	set_motor(1,VL);
+    	set_motor(2,-VR);
+    	//Time Stamp:
+    	finish = time(NULL);
+    	dif = finish -start;
+    	printf("Time for 1 Frame: %ld \n", dif);
+    	fps = 1/dif;
+    	printf("FPS: %1d \n",fps);
+
     }//Closes While Loop
 return 0;}
+/*
+ * Need too add Time Stamp.
+ * Then measure amount of fps to test if time Stamp is working
+ * Only then can I add 'I' in PID
+*/
