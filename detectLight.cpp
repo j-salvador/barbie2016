@@ -17,7 +17,7 @@ int main(){
     int w;
     int s;
     double errorValue;
-    double P;
+    double P = 0;
     double kp = 0.005;
     //int maxSpeed = 100;
     //int VL;
@@ -28,18 +28,18 @@ int main(){
     while(true){
        take_picture();
        errorValue = 0;
-       for (int i = 0; i < 32; i++){
-    	   w = get_pixel(i*10,120,3);
+       for (int i = 0; i < 320; i++){
+    	   w = get_pixel(i,120,3);
     	   if(w < 127){ //If pixel is close to black
     		   s=0;
     	   }else {
     		   s=1;
     	   }
 
-    	   errorValue = errorValue + ( ( (i-160)*s )/32 ); //Adds to errorValue if its a white pixel
+    	   errorValue = errorValue + (i-160)*s; //Adds to errorValue if its a white pixel
        }//Closes For Loop
 
-       errorValue = round(errorValue); //Rounds errorValue to a whole number
+       //errorValue = round(errorValue); //Rounds errorValue to a whole number
        P = errorValue*kp;
        printf("Error Value: %d \n" ,P);
        //VL = maxSpeed - (errorValue*kp);
