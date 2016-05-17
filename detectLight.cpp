@@ -33,8 +33,9 @@ int main(){
     	   }else {
     		   s=1;
     	   }
-    	   errorValue = errorValue/32;
+
     	   errorValue = errorValue + (i-160)*s; //Adds to errorValue if its a white pixel
+	   errorValue = errorValue/32;	
        }//Closes For Loop
 
        errorValue = round(errorValue); //Rounds errorValue to a whole number
