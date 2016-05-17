@@ -38,7 +38,7 @@ int main(){
        }//Closes For Loop
 
        errorValue = round(errorValue); //Rounds errorValue to a whole number
-       printf("Error Value: %d" ,errorValue);
+       printf("Error Value: %d \n" ,errorValue);
        //VL = maxSpeed - (errorValue*kp);
        //VR = maxSpeed + (errorValue*kp);
        //set_motor(1,VL);
