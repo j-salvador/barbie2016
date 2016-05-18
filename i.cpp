@@ -25,7 +25,7 @@ int main(){
     time_t start; //Sets 0 Point for timer to begin the clock at.
     time_t finish; //Sets finishing time
     int dif;
-    int count = 0
+    int count = 0;
 //-----------------------------------------------------------
     while(true){
     	start = time(NULL);
@@ -47,8 +47,8 @@ int main(){
     	//printf("Error Value: %d \n" ,P);
     	VL = maxSpeed - (P);
     	VR = maxSpeed + (P);
-    	set_motor(1,0);
-    	set_motor(2,0);
+    	set_motor(1,VL);
+    	set_motor(2,-VR);
     	//Time Stamp:
     	finish = time(NULL);
     	dif = finish -start;
