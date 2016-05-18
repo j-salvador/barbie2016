@@ -16,8 +16,9 @@ void networkGate(){
     char message[24];
     connect_to_server("130.195.6.196", 1024);		//connects to server with the ip address 192.168.1.2 //130.195.6.196
     send_to_server("Please server");		//sends a message to the connected server
+    message[messageLength];
     receive_from_server(message); //this may be buggy! //receives message from the connected server
-    message[messageLength] = '\0'; // strlen(message) = 6, sizeof(str) = 12 (with 6 nulls) http://stackoverflow.com/questions/4711449/what-does-the-0-symbol-mean-in-a-c-string
+    //message[messageLength] = '\0'; // strlen(message) = 6, sizeof(str) = 12 (with 6 nulls) http://stackoverflow.com/questions/4711449/what-does-the-0-symbol-mean-in-a-c-string
     send_to_server(message);		//sends a message to the connected server
     printf("%s", message);
     return;
