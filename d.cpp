@@ -16,10 +16,10 @@ int main(){
     init(0);
     int w;
     int s;
-    double current_error;
     double P = 0;
+    double D = 0;
     double kp = 0.0020;
-    double kd = 0.0005;
+    double kd = 0;
     int maxSpeed = 51;
     int VL;
     int VR;
@@ -27,15 +27,17 @@ int main(){
     time_t finish; //Sets finishing time
     int dif;
     int count = 0;
-    double time = 0;
-    
+    double tim = 0.03;
+    double avgC = 0;
+    double current_error = 0;
     double previous_error = 0;
+    double total_error = 0;
+    double delta_error;
 //-----------------------------------------------------------
     while(true){
-    	start = time(NULL);
+    	start = tim(NULL);
     	take_picture();
-    	previous_error = current_error;
-    	current_error = 0;
+    	previous_error = avgC;
     	for (int i = 0; i < 320; i++){
     	   w = get_pixel(i,120,3);
     	   if(w < 127){ //If pixel is close to black
@@ -43,32 +45,38 @@ int main(){
     	   }else {
     		   s=1;
     	   }
-
     	   current_error = current_error + (i-160)*s; //Adds to current_error if its a white pixel
     	}//Closes For Loop
-
+    	avgC = current_error/320
     	//current_error = round(current_error); //Rounds current_error to a whole number
     	P = current_error*kp;
-    	D = ((current_error-previous_error)/time)*kd;
+    	
     			
     	//printf("Error Value: %d \n" ,P);
-    	VL = maxSpeed - (P) - (D);
-    	VR = maxSpeed + (P) + (D);
-    	set_motor(1,VL);
-    	set_motor(2,-VR);
+    	VL = maxSpeed - (P);// - (D);
+    	VR = maxSpeed + (P);// + (D);
+    	//set_motor(1,VL);
+    	//set_motor(2,-VR);
     	//Time Stamp:
     	finish = time(NULL);
     	dif = finish -start;
     	if(dif==1){
-    		printf("FPS = %i \n",count);
-    		time = 1/count;
+    		tim = 1/count;
+    		total_error = total_error/count; //Averages error by current FPS
+    		D = ((total_error-previous_error)/1)*kd;
+    		previous_error = total_error;
+    		
+    		printf("FPS = %d \nVL = %d\nVR = %d\nCurrent error = %f\nPrevious error= %f",count,VL,VR,avgC,previous_error);    		
     		count = 0;
+    		total_error = 0;
     	}
+    	total_error = total_error +current_error;
+    	current_error = 0;   			
     	count++;
     }//Closes While Loop
 return 0;}
 /*
- * Need too add Time Stamp.
- * Then measure amount of fps to test if time Stamp is working
- * Only then can I add 'I' in PID
+ * 
+ * 
+ * 
 */
