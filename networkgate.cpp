@@ -8,9 +8,9 @@ extern "C" int connect_to_server( char server_addr[15],int port);
 extern "C" int send_to_server(char message[24]);
 extern "C" int receive_from_server(char message[24]);
 
-bool networkGate();
+void networkGate();
 
-bool networkGate(){
+void networkGate(){
     init(0);		//initialises rPi
     int messageLength = 6;
     char message[24];
@@ -20,7 +20,7 @@ bool networkGate(){
     message[messageLength] = '\0'; // strlen(message) = 6, sizeof(str) = 12 (with 6 nulls) http://stackoverflow.com/questions/4711449/what-does-the-0-symbol-mean-in-a-c-string
     send_to_server(message);		//sends a message to the connected server
     printf("%s", message);
-    return true;
+    return;
 }
 
 int main(){
