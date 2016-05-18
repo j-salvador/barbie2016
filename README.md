@@ -39,13 +39,13 @@ Repository for barbie2016 team for Autonomous Vehicle Challenge (AVC) for ENGR10
 - [x] Test networking code/SSHing into RaspberryPi (James)
 
 #####Week 4:
-- [ ] Write results and discussion section (ALL)
-- [ ] Summarise code ideas for Quadrant 2 (Suraj/Calvin)
+- [x] Write results and discussion section (ALL)
+- [x] Summarise code ideas for Quadrant 2 (Suraj/Calvin)
 - [ ] Possible design changes/design optimisation (Patrick/Vincent)
 
 #####Week 5:
 - [ ] Update previous sections (ALL)
-- [ ] Summarise code ideas for Quadrant 3 (Suraj/Calvin)
+- [x] Summarise code ideas for Quadrant 3 (Suraj/Calvin)
 - [ ] Understand the coding and hardware/design decisions so far (ALL)
 
 #####Week 6:
