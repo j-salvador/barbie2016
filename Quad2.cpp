@@ -109,10 +109,8 @@ int main(){
     		setTime = 0;
     	}
 //----------------------------------------Motor Control-------------------------
-    if(){
-
-
-      VL = maxSpeed - (P) + (D);
+    if(line){
+        VL = maxSpeed - (P) + (D);
     	VR = maxSpeed + (P) - (D);
     	set_motor(1,VL);
     	set_motor(2,-VR);
