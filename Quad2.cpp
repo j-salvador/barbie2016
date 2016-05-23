@@ -37,28 +37,27 @@ int main(){
     bool line = true;
     int iCount = 0;
     double lastCurrent_error = 0;
-    int black_light = 0;
+    bool white_light;
 //------------------------------------------------------------------------------
     while(true){
     	start = time(NULL);//Starts Timer
     	take_picture();
-      black_light = 0;
+      white_light = true;
 //--------------------------------------Analyzing Image-------------------------
     	for (int i = 0; i < 320; i++){
     	   w = get_pixel(i,120,3);
     	   if(w < 127){ //If pixel is close to black ------ (Reduces noise)
     		   s=0;
-           black_light++;
     	   }else {
     		   s=1;
-
+           white_light = false;
     	   }
     	   current_error = current_error + (i-160)*s; //Adds to current_error if its a white pixel
     	}//Closes For Loop
 
 //-------------------------------------No Line Detected-------------------------
 
-        if(current_error == 0 && black_light>300){ //error is 0 and black_light
+        if(current_error == 0 && white_light){ //error is 0 and black_light
           line = false;
           VL = maxSpeed;
           VR = maxSpeed;
@@ -79,14 +78,13 @@ int main(){
               if(lastCurrent_error>0){
                 set_motor(1,-VL);
               	set_motor(2,-VR);
+                Sleep(0,100000);
               }else if(lastCurrent_error<0){
                 set_motor(1,VL);
               	set_motor(2,VR);
+                Sleep(0,100000);
               }
           }//Closes iCount if statement
-          set_motor(1,VL);
-        	set_motor(2,-VR);
-
 
 //--------------------------------------Time Stamp & FPS------------------------
       finish = time(NULL);
