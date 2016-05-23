@@ -31,11 +31,11 @@ int main(){
     double avgC = 0;
     double current_error = 0;
     double previous_error = 0;
-    double total_error = 0;
     double delta_error;
+    int setTime = 0;
 //-----------------------------------------------------------
     while(true){
-    	start = tim(NULL);//Starts Timer
+    	start = time(NULL);//Starts Timer
     	take_picture();
 //--------------------------------------Analyzing Image--------------------------------
     	for (int i = 0; i < 320; i++){
@@ -55,22 +55,33 @@ int main(){
     		count = 0;
     	}
 //---------------------------------------Error Values-------------------------------
-    	avgC = current_error/320;
+    	avgC = avgC+ current_error/320;
     	P = avgC*kp;
-		D = ((avgC-previous_error)/tim)*kd;
 		printf("D = %f\nP = %f\n",D,P); //Debugging
-    	
+
 		//Initializing values for next frame
-		previous_error = avgC;
+
     	current_error = 0; //Resets current error to 0
-		avgC = 0;
+		setTime++;
     	count++;
+
+//-----------------------------Experimental--------------------------------------
+
+    	if(setTime == 10){ //This means our D value changes every 10fps
+    		previous_error = avgC;
+       		D = ((avgC-previous_error)/(0.3))*kd;
+    		avgC = 0;
+    		setTime = 0;
+
+    	}
+
+
 //----------------------------------------Motor Control--------------------------
       	VL = maxSpeed - (P);// - (D);
     	VR = maxSpeed + (P);// + (D);
     	set_motor(1,VL);
-    	set_motor(2,-VR);    	
-    	
+    	set_motor(2,-VR);
+
     }//Closes While Loop
 return 0;}
 /*
