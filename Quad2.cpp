@@ -37,26 +37,28 @@ int main(){
     bool line = true;
     int iCount = 0;
     double lastCurrent_error = 0;
-    int white_light = 0;
+    int black_light = 0;
 //------------------------------------------------------------------------------
     while(true){
     	start = time(NULL);//Starts Timer
     	take_picture();
+      black_light = 0;
 //--------------------------------------Analyzing Image-------------------------
     	for (int i = 0; i < 320; i++){
     	   w = get_pixel(i,120,3);
     	   if(w < 127){ //If pixel is close to black ------ (Reduces noise)
     		   s=0;
+           black_light++;
     	   }else {
     		   s=1;
-           white_light++;
+
     	   }
     	   current_error = current_error + (i-160)*s; //Adds to current_error if its a white pixel
     	}//Closes For Loop
 
 //-------------------------------------No Line Detected-------------------------
 
-        if(current_error ==0 && white_light<10){
+        if(current_error == 0 && black_light>300){ //error is 0 and black_light
           line = false;
           VL = maxSpeed;
           VR = maxSpeed;
@@ -71,7 +73,7 @@ int main(){
           printf("Count = %d (line has been missing for %d FPS)\n",iCount,iCount);
         }
           if( current_error<0 || current_error>0 ){
-            lastCurrent_error = current_error;
+              lastCurrent_error = current_error;
           }
           if(iCount>7){ //Line has been lost for a while. Run Correction
               if(lastCurrent_error>0){
@@ -100,11 +102,10 @@ int main(){
     	current_error = 0; //Resets current error to 0
 		  setTime++;
       count++;
-      white_light = 0;
 //----------------------------- D value for PID --------------------------------
       if(setTime == 1){ //This means our D value changes every frame
 
-       	D = ((avgC-previous_error)/(tim))*kd;
+       	D = ((avgC-previous_error)/(0.03))*kd;
         previous_error = avgC;
     		avgC = 0;
     		setTime = 0;
@@ -124,4 +125,5 @@ return 0;}
 /*
  * Kp & Kd values could be tuned more finely if time persists
  * Need to add: D = round(D); & P = round(P);
+ *Time Stamp needs fixing
 */
