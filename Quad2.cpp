@@ -37,6 +37,7 @@ int main(){
     bool line = true;
     int iCount = 0;
     double lastCurrent_error = 0;
+    int white_light++;
 //------------------------------------------------------------------------------
     while(true){
     	start = time(NULL);//Starts Timer
@@ -48,21 +49,25 @@ int main(){
     		   s=0;
     	   }else {
     		   s=1;
+           white_light++;
     	   }
     	   current_error = current_error + (i-160)*s; //Adds to current_error if its a white pixel
     	}//Closes For Loop
 
 //-------------------------------------No Line Detected-------------------------
 
-        if(current_error ==0){
+        if(current_error == 0 && white_light<10 ){
           line = false;
-
           VL = maxSpeed;
           VR = maxSpeed;
-
           set_motor(1,-VL);//Sets motors to reverse
         	set_motor(2,VR);
           iCount++; //Counts number of frames line has been missing for
+        }else if(P>-0.25 && P<0.25 ){ //P Between -0.25 and 0.25
+          VL = maxSpeed +30;
+          VR = maxSpeed +30;
+          line = true;
+          iCount = 0;
         }else{
           line = true;
           iCount = 0;
@@ -85,7 +90,6 @@ int main(){
           set_motor(1,VL);
         	set_motor(2,-VR);
 
-
 //--------------------------------------Time Stamp & FPS------------------------
       finish = time(NULL);
     	dif = finish -start;
@@ -102,15 +106,13 @@ int main(){
       count++;
 //----------------------------- D value for PID --------------------------------
       if(setTime == 1){ //This means our D value changes every frame
-
        	D = ((avgC-previous_error)/(tim))*kd;
         previous_error = avgC;
     		avgC = 0;
     		setTime = 0;
     	}
 //----------------------------------------Motor Control-------------------------
-    if(){
-
+    if(line){
 
       VL = maxSpeed - (P) + (D);
     	VR = maxSpeed + (P) - (D);
