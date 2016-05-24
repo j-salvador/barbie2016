@@ -8,6 +8,7 @@ extern "C" int send_to_server(char message[24]);
 extern "C" int receive_from_server(char message[24]);
 
 void networkGate();
+//bool run_gate = true;
 
 void networkGate(){
     init(1);		//initialises rPi
@@ -16,6 +17,7 @@ void networkGate(){
     send_to_server("Please");		//sends "Please" to server
     receive_from_server(message); //receives message
     send_to_server(message);	//sends back received message
+    //run_gate = false;
 }
 
 int main(){
