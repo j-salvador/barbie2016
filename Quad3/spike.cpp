@@ -43,6 +43,7 @@ int main(){
     bool middle = false;
     int spike = 10000; //Not sure what this is.
     bool deadEnd = false;
+    double tIntersection = 999999; //Have no idea what this value is either.
 //------------------------------------------------------------------------------
     while(true){
     	start = time(NULL);//Starts Timer
@@ -62,73 +63,7 @@ int main(){
     	P = (current_error/320)*kp;
 		  //printf("D = %f\nP = %f\n",D,P); //Debugging
 //-------------------------------- Quad 3 Detect Line changes ------------------
-left = false;
-right = false;
-middle = false;
-deadEnd = false;
-double tIntersection = 999999; //Have no idea what this value is either.
-
       printf("Spike = %f\navg = %f\nC",current_error,avgC);
-      if(current_error< -1*spike ){
-        left = true; //This is an Intersection with left exit path
-      }
-      if(current_error > spike){
-         right = true;//Right exit path
-      }
-      if(current_error > tIntersection){ //Not sure what t Intersection looks like
-        middle = true; //T Intersection, right and left exit
-      }
-      if(current_error=0){
-        deadEnd = true; //needs to turn around
-      }
-      if(P == 0){ //detect its ontop of the line
-        halt = true; //Purpose to See if its done a correct turn. If so this will change this to go forward
-        left = false;
-        initialLeft = true;
-        right = false;
-        deadEnd = false;
-
-      }
-//----------------------------------------Motor Control-------------------------
-//This is going to be alot different
-if(left){//Prioritizes turning left
-//  printf("Left\n");
-  //Currently turning left
-  if(initialLeft){ //This turns the AVC by a fixed amount to the left
-  //  printf("initialLeft\n");
-    VL = 40; //This may not be enough
-    VR = 40;
-    //set_motor(1,-VL);
-    //set_motor(2,-VR);
-    Sleep(0,080000);
-    initialLeft = false; //only occurs once.
-  }
-  //Now the AVC will correctly align itself with the line with P
-  VL = maxSpeed - (P);
-  VR = maxSpeed + (P);
-//  set_motor(1,VL);
-//  set_motor(2,-VR);
-}else if(right){
-//  printf("Right\n");
-  //Currently turning right ----Same as left but differernt motor direction
-}else if(halt){
-//  printf("Halt\n");
-  //Stop your ontop of the
-  VL = maxSpeed*0;
-  VR = maxSpeed*0;
-//  set_motor(1,VL);
-//  set_motor(2,VR);
-}else if(deadEnd){
-//  printf("deadEnd\n");
-  //Turns right
-  VL = maxSpeed;
-  VR = maxSpeed;
-//  set_motor(1,VL);
-  //set_motor(2,VR);
-  Sleep(0,500000);
-  //set_motor(1,0);
-//  set_motor(2,0);
-}
 current_error = 0; //Resets current error to 0
 //-----------------------------------------END OF PROGRAM-----------------------
 }//Closes While Loop
