@@ -44,10 +44,15 @@ int main(){
     int spike = 10000; //Not sure what this is.
     bool deadEnd = false;
     double tIntersection = 999999; //Have no idea what this value is either.
+
+    int l = 0;
+    int r = 0;
 //------------------------------------------------------------------------------
     while(true){
     	start = time(NULL);//Starts Timer
     	take_picture();
+      l = 0;
+      r = 0;
 //--------------------------------------Analyzing Image-------------------------
     	for (int i = 0; i < 320; i++){
     	   w = get_pixel(i,120,3);
@@ -55,6 +60,11 @@ int main(){
     		   s=0;
     	   }else {
     		   s=1;
+           if(i<160){
+             l++;
+           }else{
+             r++;
+           }
     	   }
     	   current_error = current_error + (i-160)*s; //Adds to current_error if its a white pixel
     	}//Closes For Loop
@@ -63,7 +73,7 @@ int main(){
     	P = (current_error/320)*kp;
 		  //printf("D = %f\nP = %f\n",D,P); //Debugging
 //-------------------------------- Quad 3 Detect Line changes ------------------
-      printf("Spike = %f\navg = %f\nC",current_error,avgC);
+      printf("Avgerage Error = %f\nLeft = %d\nRight = %d\n"avgC,l,r);
 current_error = 0; //Resets current error to 0
 //-----------------------------------------END OF PROGRAM-----------------------
 }//Closes While Loop
