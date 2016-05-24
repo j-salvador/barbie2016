@@ -59,15 +59,13 @@ int main(){
     	   current_error = current_error + (i-160)*s; //Adds to current_error if its a white pixel
     	}//Closes For Loop
 //---------------------------------------Error Values---------------------------
-          	avgC =  (current_error/320);
-          	P = (current_error/320)*kp;
-      		  //printf("D = %f\nP = %f\n",D,P); //Debugging
+    	avgC =  (current_error/320);
+    	P = (current_error/320)*kp;
+		  //printf("D = %f\nP = %f\n",D,P); //Debugging
 //-------------------------------- Quad 3 Detect Line changes ------------------
-left = false;a
-right = false;
-middle = false;
-deadEnd = false;
 
+
+      printf("Spike = %f\navg = %f\nC",current_error,avgC);
       if(current_error< -1*spike ){
         left = true; //This is an Intersection with left exit path
       }
@@ -88,41 +86,46 @@ deadEnd = false;
         deadEnd = false;
 
       }
-//----------------------------------------Motor Control-------------------------
-//This is going to be alot different
-if(left){//Prioritizes turning left
-  //Currently turning left
-  if(initialLeft){ //This turns the AVC by a fixed amount to the left
-    VL = 40; //This may not be enough
-    VR = 40;
+//---------------------------------- Pulse to begin turn-------------------------
+//This is going to be really different from quad2
+//Prioritizes turning left
+//Method Pulse in direction then let P take over.
+
+if(left){
+//  printf("Left\n");
+    VL = maxSpeed;
+    VR = maxSpeed;
     set_motor(1,-VL);
     set_motor(2,-VR);
-    Sleep(0,080000);
-    initialLeft = false; //only occurs once.
-  }
-  //Now the AVC will correctly align itself with the line with P
-  VL = maxSpeed - (P);
-  VR = maxSpeed + (P);
-  set_motor(1,VL);
-  set_motor(2,-VR);
-}else if(right){
+    Sleep(0,100000);
+    left = false;
+
+}else if(right){ //-----------------------Right-------------------------------
+//  printf("Right\n");
   //Currently turning right ----Same as left but differernt motor direction
-}else if(halt){
-  //Stop your ontop of the
-  VL = maxSpeed*0;
-  VR = maxSpeed*0;
+  VL = maxSpeed;
+  VR = maxSpeed;
   set_motor(1,VL);
   set_motor(2,VR);
-}else if(deadEnd){
+  Sleep(0,100000);
+  right = false;
+
+}else if(deadEnd){ //-----------------------Dead End----------------------------
+//  printf("deadEnd\n");
   //Turns right
   VL = maxSpeed;
   VR = maxSpeed;
   set_motor(1,VL);
   set_motor(2,VR);
   Sleep(0,500000);
-  set_motor(1,0);
-  set_motor(2,0);
+  deadEnd = false;
 }
+//------------------------------------------------------------------------------
+//-------------------------------- Main Motor Control --------------------------
+VL = maxSpeed - (P);
+VR = maxSpeed + (P);
+set_motor(1,VL);
+set_motor(2,-VR);
 current_error = 0; //Resets current error to 0
 //-----------------------------------------END OF PROGRAM-----------------------
 }//Closes While Loop
