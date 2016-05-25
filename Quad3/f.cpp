@@ -84,7 +84,7 @@ if(l >155 || r >155){
           VR = maxSpeed;
           set_motor(1,VL);
           set_motor(2,VR);
-          Sleep(0,500000);
+          Sleep(0,400000);
           //------Normal Error Correcting------//
         }else if(current_error == 0 && white_light){ //error is 0 and black_light
           line = false;
@@ -104,16 +104,16 @@ if(l > 155){ //-----------------------Right-------------------------------
   VR = maxSpeed;
   set_motor(1,VL);
   set_motor(2,VR);
-  Sleep(0,100000);
-  right = false;
+  Sleep(0,110000);
+
   //RIGHT
-  else if( r> 155){
+}else if( r> 155){
     printf("Left\n");
     VL = maxSpeed;
     VR = maxSpeed;
     set_motor(1,-VL);
     set_motor(2,-VR);
-    Sleep(0,100000);
+    Sleep(0,110000);
   }
 
 
