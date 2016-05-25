@@ -20,7 +20,7 @@ int main(){
     double D = 0;
     double kp = 0.27;
     double kd = 0.003;
-    int maxSpeed = 40;
+    int maxSpeed = 35;
     int VL;
     int VR;
     time_t start; //Sets 0 Point for timer to begin the clock at.
