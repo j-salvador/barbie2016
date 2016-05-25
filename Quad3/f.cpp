@@ -41,6 +41,7 @@ int main(){
     int l = 0;
     int r = 0;
     int turn_180 = 0;
+    bool turning_around = false;
 //------------------------------------------------------------------------------
     while(true){
     	start = time(NULL);//Starts Timer
@@ -66,24 +67,26 @@ int main(){
     	}//Closes For Loop
 
 //-------------------------------------No Line Detected-------------------------
-        if(l >100 || r >100){//Spin around 180}
 
 //--------------Debugging-------------------------
-if(l >100 || r >100){
-        printf("Left = %d\nRight = %d\n"l,r)//Debugging
+if(l >155 || r >155){
+        printf("Left = %d\nRight = %d\n",l,r);//Debugging
 
       printf("Turning Around %d\n",turn_180);
+      turning_around = true;
+      turn_180++;
     }
-      //VL = maxSpeed;
-      //VR = maxSpeed;
-      //set_motor(1,VL);
-      //set_motor(2,VR);
-      //Sleep(0,100000);
-      //turn_180++;
+
 //--------------Debugging ENDS-------------------------
-
-
-        if(current_error == 0 && white_light){ //error is 0 and black_light
+//Turns around 180 Degrees Right--------//
+        if(current_error == 0 && white_light && turning_around){
+          VL = maxSpeed;
+          VR = maxSpeed;
+          set_motor(1,VL);
+          set_motor(2,VR);
+          Sleep(0,500000);
+          //------Normal Error Correcting------//
+        }else if(current_error == 0 && white_light){ //error is 0 and black_light
           line = false;
           VL = maxSpeed;
           VR = maxSpeed;
@@ -94,6 +97,29 @@ if(l >100 || r >100){
           line = true;
           iCount = 0;
         }
+//-----------------------------------------Right & Left -------------------//
+if(l > 155){ //-----------------------Right-------------------------------
+  printf("Right\n");
+  VL = maxSpeed;
+  VR = maxSpeed;
+  set_motor(1,VL);
+  set_motor(2,VR);
+  Sleep(0,100000);
+  right = false;
+  //RIGHT
+  else if( r> 155){
+    printf("Left\n");
+    VL = maxSpeed;
+    VR = maxSpeed;
+    set_motor(1,-VL);
+    set_motor(2,-VR);
+    Sleep(0,100000);
+  }
+
+
+//----------------------------------------RIGHT & LEFT END--------------------//
+
+
         if(iCount>0){ //Debugging
           printf("Count = %d (line has been missing for %d FPS)\n",iCount,iCount);
         }
