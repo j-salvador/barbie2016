@@ -85,7 +85,7 @@ if(l >155 || r >155){
           VR = maxSpeed;
           set_motor(1,VL);
           set_motor(2,VR);
-          Sleep(0,400000);
+          Sleep(0,350000);
           //------Normal Error Correcting------//
         }else if(current_error == 0 && white_light){ //error is 0 and black_light
           line = false;
@@ -99,7 +99,7 @@ if(l >155 || r >155){
           iCount = 0;
         }
 //-----------------------------------------Right & Left -------------------//
-if(l > 155){ //-----------------------Right-------------------------------
+if(l > 120 && turning_around){ //-----------------------Right-------------------------------
   printf("Right\n");
   VL = maxSpeed;
   VR = maxSpeed;
@@ -108,7 +108,7 @@ if(l > 155){ //-----------------------Right-------------------------------
   Sleep(0,110000);
 
   //RIGHT
-}else if( r> 155){
+}else if( r> 120 && turning_around){
     printf("Left\n");
     VL = maxSpeed;
     VR = maxSpeed;
@@ -128,6 +128,21 @@ if(l > 155){ //-----------------------Right-------------------------------
               lastCurrent_error = current_error;
           }
           if(iCount>7){ //Line has been lost for a while. Run Correction
+            set_motor(1,-VL);
+            set_motor(2,-VR);
+            Sleep(0,200000);
+            //take another picture -----------------------//
+            take_picture();
+            for (int i = 0; i < 320; i++){
+          	   w = get_pixel(i,120,3);
+          	   if(w < 127){ //If pixel is close to black ------ (Reduces noise)
+          		   s=0;
+          	   }else {
+          		   s=1;
+               }
+          	   current_error = current_error + (i-160)*s; //Adds to current_error if its a white pixel
+          	}//Closes For Loop
+            if(current error == 0){
               if(lastCurrent_error>0){
                 set_motor(1,-VL);
               	set_motor(2,-VR);
@@ -137,6 +152,7 @@ if(l > 155){ //-----------------------Right-------------------------------
               	set_motor(2,VR);
                 Sleep(0,100000);
               }
+            }
           }//Closes iCount if statement
 
 //--------------------------------------Time Stamp & FPS------------------------
