@@ -69,7 +69,7 @@ int main(){
 //-------------------------------------No Line Detected-------------------------
 
 //--------------Debugging-------------------------
-if(l >155 || r >155){
+if(l >155 && r >155){
         printf("Left = %d\nRight = %d\n",l,r);//Debugging
 
       printf("Turning Around %d\n",turn_180);
@@ -80,12 +80,12 @@ if(l >155 || r >155){
 //--------------Debugging ENDS-------------------------
 //Turns around 180 Degrees Right--------//
         if(current_error == 0 && white_light && turning_around){
-          maxSpeed = 35;
+          //maxSpeed = 40;
           VL = maxSpeed;
           VR = maxSpeed;
           set_motor(1,VL);
           set_motor(2,VR);
-          Sleep(0,350000);
+          Sleep(0,220000);
           //------Normal Error Correcting------//
         }else if(current_error == 0 && white_light){ //error is 0 and black_light
           line = false;
@@ -129,28 +129,22 @@ if(l > 120 && turning_around){ //-----------------------Right-------------------
           }
           if(iCount>7){ //Line has been lost for a while. Run Correction
             set_motor(1,-VL);
-            set_motor(2,-VR);
-            Sleep(0,200000);
-            //take another picture -----------------------//
-            take_picture();
-            for (int i = 0; i < 320; i++){
-          	   w = get_pixel(i,120,3);
-          	   if(w < 127){ //If pixel is close to black ------ (Reduces noise)
-          		   s=0;
-          	   }else {
-          		   s=1;
-               }
-          	   current_error = current_error + (i-160)*s; //Adds to current_error if its a white pixel
-          	}//Closes For Loop
-            if(current error == 0){
+            set_motor(2,VR);
+            Sleep(0,180000);
+
+            if(current_error == 0){
+              VL = maxSpeed;
+              VR = maxSpeed;
               if(lastCurrent_error>0){
                 set_motor(1,-VL);
               	set_motor(2,-VR);
-                Sleep(0,100000);
+                Sleep(0,050000);
+
               }else if(lastCurrent_error<0){
                 set_motor(1,VL);
               	set_motor(2,VR);
-                Sleep(0,100000);
+                Sleep(0,050000);
+
               }
             }
           }//Closes iCount if statement
