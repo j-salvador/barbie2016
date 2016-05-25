@@ -20,7 +20,7 @@ int main(){
     double D = 0;
     double kp = 0.27;
     double kd = 0.003;
-    int maxSpeed = 35;
+    int maxSpeed = 40;
     int VL;
     int VR;
     time_t start; //Sets 0 Point for timer to begin the clock at.
@@ -80,6 +80,7 @@ if(l >155 || r >155){
 //--------------Debugging ENDS-------------------------
 //Turns around 180 Degrees Right--------//
         if(current_error == 0 && white_light && turning_around){
+          maxSpeed = 35;
           VL = maxSpeed;
           VR = maxSpeed;
           set_motor(1,VL);
