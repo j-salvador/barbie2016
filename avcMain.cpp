@@ -23,7 +23,7 @@ bool mazeDone = false;
 */
 int main(){
     InitHardware(0);//Initilize the RPis hardware
-    while(!done){
+    while(!done){ //Keeps on looping through until the AVC challenge is done
         while (!gateDone){
             gateDone = networkGate();
             if(gateDone){
