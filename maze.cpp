@@ -17,7 +17,7 @@ extern "C" int Sleep(int sec, int usec);
 extern "C" int set_motor( int motor , int speed);
 extern "C" int set_PWM( int chan , int value );
 extern "C" char set_pixel(int row, int col,char red,char green, char blue);
-extern "C" int ReadAnalog(int ch_adc);
+extern "C" int read_analog(int ch_adc);
 //-----------------------------------------------------------------------------
 //Declaraiton of the functions.
 bool navigateMaze();
@@ -44,8 +44,8 @@ bool navigateMaze(){
     int mazeThreshold = 600; //Should be slightly more than the wall distance reading
     int mazeState = false; //Initially the maze is not complete
     //----------------------------------------------
-    dLeft = ReadAnalog(leftSensor); //Takes a reading from both sensors
-    dRight = ReadAnalog(rightSensor);
+    dLeft = read_analog(leftSensor); //Takes a reading from both sensors
+    dRight = read_analog(rightSensor);
     if (dLeft <= mazeThreshold && dRight <= mazeThreshold){//Checks if it is in the maze
         //Runs the maze code
         mazeState = mazePID(); //the mazePID function will return true when the maze is done
@@ -73,8 +73,8 @@ bool mazePID(){
     //---------------------------------------------
     //Loop that runs while the maze isn't complete
     while (true){
-        dLeft = ReadAnalog(leftSensor);
-        dRight = ReadAnalog(rightSensor);
+        dLeft = read_analog(leftSensor);
+        dRight = read_analog(rightSensor);
         if (dLeft > turnThreshold && dRight <= wallDistReading){ //Should it turn left
             turn(left);
         }
@@ -84,7 +84,7 @@ bool mazePID(){
         else if (dLeft < wallDistReading && dRight < wallDistReading){ //Should it turn around
             turn(right);
         }
-        currentError = round(wallDistReading - ReadAnalog(leftSensor));
+        currentError = round(wallDistReading - read_analog(leftSensor));
         printf("Error Value: %d" ,currentError ); //Prints Error Value
         mazeDerivitive = round((currentError - pastError)/timePeriod);
         VL = maxSpeed - (currentError*kp) + (mazeDerivitive*kd);
@@ -116,7 +116,7 @@ void turn(int dir){
         set_motor(leftMotor, turnConstant * turnSpeed); //Makes the left motor turn according to the turn direction
         set_motor(rightMotor, -1*turnConstant * turnSpeed); //Makes the right motor turn according to the turn direction
         //Re-checks the readings on the sensors
-        if (ReadAnalog(leftSensor) > turnDoneThreshold && ReadAnalog(rightSensor) > turnDoneThreshold){
+        if (read_analog(leftSensor) > turnDoneThreshold && read_analog(rightSensor) > turnDoneThreshold){
             turnDone = true; //Breaks the loop when the robot has clearly completed a turn.
         }
         //Loop should end when the robot is roughly centered about a wall.
