@@ -38,6 +38,10 @@ int main(){
     //once gate is open:
     gate = false;
     followLine = true;
+    //want to test Quad 3 only (uncomment out):
+    //bool quad3 = true;
+    //bool quad2 = false;
+    
   }
   while(followLine){ // Main Loop ---To follow line
     take_picture();
