@@ -18,16 +18,16 @@ int main(){
   int s;
   int top;
   int bottom;
-  bool quad2 = false;
+  bool quad2 = true;
   bool quad3 = false;
-  int maxSpeed = 35;
+  int maxSpeed = 40;
   int VL;
   int VR;
   int iCount = 0;
   bool gate = true;
   bool followLine = false;
   bool maze = false;
-
+  bool Correction = true;
   double P = 0;
   double kp = 0.27;
   double avgC = 0;
@@ -40,6 +40,7 @@ int main(){
     followLine = true;
   }
   while(followLine){ // Main Loop ---To follow line
+    init(0);
     take_picture();
     l = 0;
     r = 0;
@@ -104,7 +105,7 @@ if(current_error == 0 && Correction){
     if(iCount>7){ //Line has been lost for a while. Run Correction
       set_motor(1,-VL);
       set_motor(2,VR);
-      Sleep(0,180000);
+      Sleep(0,300000);
 
       if(current_error == 0){
         VL = maxSpeed;
@@ -132,23 +133,41 @@ if(l >155 && r >155 && bottom >115){ //T Intersection
   quad3 = true;
 }else if(l >155 && bottom >115){ //Left Corner
   //turn left by fixed amount
+  set_motor(1,0);
+  set_motor(2,0);
+  Sleep(1,000000);
   set_motor(1,-VL);
   set_motor(2,-VR);
   Sleep(0,200000);
+  set_motor(1,0);
+  set_motor(2,0);
+  Sleep(1,000000);
   quad2 = false;
   quad3 = true;
 }else if(r >155 && bottom >115){ //Right Corner
   //turn right by fixed amount
+  set_motor(1,0);
+  set_motor(2,0);
+  Sleep(1,000000);
   set_motor(1,VL);
   set_motor(2,VR);
   Sleep(0,200000);
+  set_motor(1,0);
+  set_motor(2,0);
+  Sleep(1,000000);
   quad2 = false;
   quad3 = true;
 }else if(quad3 && current_error == 0){ //deadEnd
 //Turns 180* degrees if it loses the line and is in quad3
+  set_motor(1,0);
+  set_motor(2,0);
+  Sleep(1,000000);
   set_motor(1,VL);
   set_motor(2,VR);
   Sleep(0,400000);
+  set_motor(1,0);
+  set_motor(2,0);
+  Sleep(1,000000);
 }else{ //goes straight if none Detected
   line = true;
 }
@@ -170,7 +189,7 @@ if(line){
 }
 //--------------------------------------Detects Maze--------------------------
 if(maze){ //If we reach maze this will be used to switch to maze while loop
-  followLine = false
+  followLine = false;
   maze = true;
 }
 
