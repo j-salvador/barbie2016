@@ -42,8 +42,20 @@ int main(){
     int r = 0;
     int turn_180 = 0;
     bool turning_around = false;
+    bool quad3 = false;
+    bool back = false;
+    bool part2 = false;
+    bool gate = true;
 //------------------------------------------------------------------------------
-    while(true){
+while(gate){
+
+
+  gate = false;
+  part2 = true;
+}
+
+//------------------------------------------------------------------------------
+    while(part2){
     	start = time(NULL);//Starts Timer
     	take_picture();
       white_light = true;
@@ -99,7 +111,13 @@ if(l >155 && r >155){
           iCount = 0;
         }
 //-----------------------------------------Right & Left -------------------//
-if(l > 120 && turning_around){ //-----------------------Right-------------------------------
+
+if(l>120 && r>120){
+  quad3 = true;
+  maxSpeed = 35;
+}
+if(quad3){
+if(l > 120 ){ //-----------------------Right-------------------------------
   printf("Right\n");
   VL = maxSpeed;
   VR = maxSpeed;
@@ -108,7 +126,7 @@ if(l > 120 && turning_around){ //-----------------------Right-------------------
   Sleep(0,110000);
 
   //RIGHT
-}else if( r> 120 && turning_around){
+}else if( r> 120 ){
     printf("Left\n");
     VL = maxSpeed;
     VR = maxSpeed;
@@ -116,6 +134,7 @@ if(l > 120 && turning_around){ //-----------------------Right-------------------
     set_motor(2,-VR);
     Sleep(0,110000);
   }
+}
 
 
 //----------------------------------------RIGHT & LEFT END--------------------//
