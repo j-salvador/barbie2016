@@ -17,13 +17,13 @@ extern "C" int Sleep(int sec, int usec);
 extern "C" int set_motor( int motor , int speed);
 extern "C" int set_PWM( int chan , int value );
 extern "C" char set_pixel(int row, int col,char red,char green, char blue);
-extern "C" int ReadAnalog(int ch_adc);
+extern "C" int read_analog(int ch_adc);
 
 int main(){
   while(true){
-    int s1 = ReadAnalog(0);
-    int s2 = ReadAnalog(1);
-    printf("Sensor A0:" + s1 + ", Sensor A1" + s2 + "\n");
+    int s1 = read_analog(0);
+    int s2 = read_analog(1);
+    printf("Sensor A0:%d, Sensor A1: %d", s1, s2);
   }
   return 0;
 }
