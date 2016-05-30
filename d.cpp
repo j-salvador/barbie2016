@@ -125,51 +125,71 @@ if(current_error == 0 && Correction){
 }
 //-------------------------------Quad 3 Trigger---------------------------------
 if(l >155 && r >155 && bottom >115){ //T Intersection
-  //Choose left path
-  //turn left
-
-  quad2 = false;
-  quad3 = true;
-}else if(l >155 && bottom >115){ //Left Corner
-  //turn left by fixed amount
-  printf("LEFT\n");
+  printf("Left Corner\n");
   set_motor(1,0);
   set_motor(2,0);
-  Sleep(1,000000);
+  Sleep(1,500000);
+
   set_motor(1,-VL);
   set_motor(2,-VR);
-  Sleep(0,400000);
+  Sleep(0,200000);
+  if(quad2){
+    quad3 = true;
+  }
+
   set_motor(1,0);
   set_motor(2,0);
-  Sleep(1,000000);
-  quad2 = false;
-  quad3 = true;
-}else if(r >155 && bottom >115){ //Right Corner
+  Sleep(5,000000);
+}else if( ((l >155) && bottom >115)) || ((l>100) && (quad3) ){ //Left Corner
+  //turn left by fixed amount
+  printf("Left Corner\n");
+  set_motor(1,0);
+  set_motor(2,0);
+  Sleep(1,500000);
+
+  set_motor(1,-VL);
+  set_motor(2,-VR);
+  Sleep(0,200000);
+  if(quad2){
+    quad3 = true;
+  }
+
+  set_motor(1,0);
+  set_motor(2,0);
+  Sleep(5,000000);
+}else if( ((r >155) && (bottom >115)) || ((r>100) && (quad3)) ){ //Right Corner
   //turn right by fixed amount
-  printf("RIGHT\n");
+  printf("Right Corner\n");
   set_motor(1,0);
   set_motor(2,0);
-  Sleep(1,000000);
+  Sleep(1,500000);
+
   set_motor(1,VL);
   set_motor(2,VR);
-  Sleep(0,400000);
+  Sleep(0,200000);
+  if(quad2){
+    quad3 = true;
+  }
+
   set_motor(1,0);
   set_motor(2,0);
-  Sleep(1,000000);
-  quad2 = false;
-  quad3 = true;
+  Sleep(5,000000);
 }else if(quad3 && current_error == 0){ //deadEnd
 //Turns 180* degrees if it loses the line and is in quad3
-  printf("DeadEnd\n");
+  printf("deadEnd\n");
   set_motor(1,0);
   set_motor(2,0);
-  Sleep(1,000000);
+  Sleep(1,500000);
+
   set_motor(1,VL);
   set_motor(2,VR);
-  Sleep(0,600000);
+  Sleep(0,400000);
+
   set_motor(1,0);
   set_motor(2,0);
-  Sleep(1,000000);
+  Sleep(5,000000);
+
+  //Add code for it to reverse a little before it continues
 }else{ //goes straight if none Detected
   line = true;
 }
