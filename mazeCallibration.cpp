@@ -23,7 +23,7 @@ int main(){
   while(true){
     int s1 = ReadAnalog(0);
     int s2 = ReadAnalog(1);
-    println("Sensor A0:" + s1 + ", Sensor A1" + s2);
+    printf("Sensor A0:" + s1 + ", Sensor A1" + s2 + "\n");
   }
-  return true;
+  return 0;
 }
