@@ -40,7 +40,6 @@ int main(){
     followLine = true;
   }
   while(followLine){ // Main Loop ---To follow line
-    init(0);
     take_picture();
     l = 0;
     r = 0;
@@ -133,12 +132,13 @@ if(l >155 && r >155 && bottom >115){ //T Intersection
   quad3 = true;
 }else if(l >155 && bottom >115){ //Left Corner
   //turn left by fixed amount
+  printf("LEFT\n");
   set_motor(1,0);
   set_motor(2,0);
   Sleep(1,000000);
   set_motor(1,-VL);
   set_motor(2,-VR);
-  Sleep(0,200000);
+  Sleep(0,400000);
   set_motor(1,0);
   set_motor(2,0);
   Sleep(1,000000);
@@ -146,12 +146,13 @@ if(l >155 && r >155 && bottom >115){ //T Intersection
   quad3 = true;
 }else if(r >155 && bottom >115){ //Right Corner
   //turn right by fixed amount
+  printf("RIGHT\n");
   set_motor(1,0);
   set_motor(2,0);
   Sleep(1,000000);
   set_motor(1,VL);
   set_motor(2,VR);
-  Sleep(0,200000);
+  Sleep(0,400000);
   set_motor(1,0);
   set_motor(2,0);
   Sleep(1,000000);
@@ -159,12 +160,13 @@ if(l >155 && r >155 && bottom >115){ //T Intersection
   quad3 = true;
 }else if(quad3 && current_error == 0){ //deadEnd
 //Turns 180* degrees if it loses the line and is in quad3
+  printf("DeadEnd\n");
   set_motor(1,0);
   set_motor(2,0);
   Sleep(1,000000);
   set_motor(1,VL);
   set_motor(2,VR);
-  Sleep(0,400000);
+  Sleep(0,600000);
   set_motor(1,0);
   set_motor(2,0);
   Sleep(1,000000);
