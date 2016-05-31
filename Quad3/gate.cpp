@@ -16,7 +16,7 @@ int main(){
     //This sets up the RPi hardware and ensures
     //everything is working correctly
 	//Initializing variables
-    init(0);
+    init(1);
     int w;
     int s;
     double P = 0;
@@ -51,7 +51,7 @@ int main(){
     bool gate = true;
 //------------------------------------------------------------------------------
 while(gate){
-  init(1);		//initialises rPi
+  	//initialises rPi
   char message[24]; //initialises array of chars, size 24
   connect_to_server("130.195.6.196", 1024);		//connects to server @130.195.6.196:1024
   send_to_server("Please");		//sends "Please" to server
